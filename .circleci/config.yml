@@ -36,9 +36,22 @@ jobs:
           name: テストの実行
           command: bundle exec rspec
 
+  code-check:
+    docker:
+      - image: circleci/ruby:2.5.1-node-browsers
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: bundle install
+          command: bundle install --path vendor/bundle
+      - run:
+          name: rubocopを実行
+          command: bundle exec rubocop
 
 workflows:
   version: 2
   workflows:
     jobs:
       - test
+      - code-check
