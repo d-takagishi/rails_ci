@@ -55,32 +55,32 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_ROOT_PASSWORD: ''
           MYSQL_DATABASE: rails_ci_test
-      working_directory: ~/repo
-      steps:
-        - checkout
-        - restore_cache:
-            name: bundle installの結果をrestore
-            key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-        - run:
-            name: setup bundler
-            command: |
-              sudo gem update --system
-              sudo gem uninstall bundler
-              sudo rm /usr/local/bin/bundle
-              sudo rm /usr/local/bin/bundler
-              sudo gem install bundler
-        - run:
-            name: bundle install
-            command: bundle install --path vendor/bundle
-        - run:
-            name: データベースの起動を待機
-            command: dockerize -wait tcp://127.0.0.1:3306 -timeout 1m
-        - run:
-            name: データベースのセットアップ
-            command: bundle exec rake db:schema:load
-        - run:
-            name: テストの実行
-            command: bundle exec rspec
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          name: bundle installの結果をrestore
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: setup bundler
+          command: |
+            sudo gem update --system
+            sudo gem uninstall bundler
+            sudo rm /usr/local/bin/bundle
+            sudo rm /usr/local/bin/bundler
+            sudo gem install bundler
+      - run:
+          name: bundle install
+          command: bundle install --path vendor/bundle
+      - run:
+          name: データベースの起動を待機
+          command: dockerize -wait tcp://127.0.0.1:3306 -timeout 1m
+      - run:
+          name: データベースのセットアップ
+          command: bundle exec rake db:schema:load
+      - run:
+          name: テストの実行
+          command: bundle exec rspec
 
 
 workflows:
