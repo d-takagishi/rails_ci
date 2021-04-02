@@ -39,9 +39,19 @@ jobs:
   code-check:
     docker:
       - image: circleci/ruby:2.5.1-node-browsers
+        environment:
+          BUNDLER_VERSION: 2.0.1
     working_directory: ~/repo
     steps:
       - checkout
+      - run:
+          name: setup bundler
+          command: |
+            sudo gem update --system
+            sudo gem uninstall bundler
+            sudo rm /usr/local/bin/bundle
+            sudo rm /usr/local/bin/bundler
+            sudo gem install bundler
       - run:
           name: bundle install
           command: bundle install --path vendor/bundle
