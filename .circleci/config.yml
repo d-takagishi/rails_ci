@@ -102,6 +102,9 @@ workflows:
   workflows:
     jobs:
       - build
+      - code-check:
+          requires:
+            - build
       - test:
           requires:
             - build
